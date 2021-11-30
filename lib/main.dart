@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:pothole_detection_app/landing_page.dart';
 import 'package:provider/provider.dart';
 
 import 'app/services/auth.dart';
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.indigo,
         ),
-        home: SignInPage(),
+        home: LandingPage(),
       ),
     );
   }

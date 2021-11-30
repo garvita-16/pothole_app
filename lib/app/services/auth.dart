@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+
+import '../home_page.dart';
 abstract class AuthBase{
   User get currentUser;
   Stream<User> authStateChanges();
@@ -71,11 +73,12 @@ class Auth implements AuthBase{
 
   Future<bool> loginUserUsingPhone(String phone, BuildContext context) async{
     FirebaseAuth auth = FirebaseAuth.instance;
+    dynamic userCredential = null;
     auth.verifyPhoneNumber(
       phoneNumber: phone,
       timeout: Duration(seconds: 60),
       verificationCompleted: (AuthCredential credential) async{
-       final userCredential = await _firebaseAuth.signInWithCredential(credential);
+       userCredential = await _firebaseAuth.signInWithCredential(credential);
        final user = userCredential.user;
        return user;
       },
@@ -101,10 +104,15 @@ class Auth implements AuthBase{
                       onPressed: () async {
                         final code = _codeController.text.trim();
                         final credential = PhoneAuthProvider.credential(verificationId: verificationId, smsCode: code);
-                        final userCredential = await _firebaseAuth.signInWithCredential(credential);
+                        userCredential = await _firebaseAuth.signInWithCredential(credential);
                         final user = userCredential.user;
                         if(user != null) {
-                          return user;
+                          Navigator.of(context).push(
+                              MaterialPageRoute<void>(
+                                fullscreenDialog: true,
+                                builder:(context)=> HomePage(),
+                              )
+                          );
                         }
                         else {
                           print('user is null');
@@ -121,6 +129,7 @@ class Auth implements AuthBase{
       },
       // codeAutoRetrievalTimeout: codeAutoRetrievalTimeout
     );
+    return userCredential.user;
   }
 
   @override
