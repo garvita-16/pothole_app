@@ -1,17 +1,38 @@
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-class ReportPothole extends StatelessWidget {
-  //const ReportPothole({Key? key}) : super(key: key);
+class ReportPothole extends StatefulWidget {
+  @override
+  State<ReportPothole> createState() => _ReportPotholeState();
+}
 
+class _ReportPotholeState extends State<ReportPothole> {
   final ImagePicker _picker = ImagePicker();
 
-  Future<XFile> pickImage() async{
-    return await  _picker.pickImage(source: ImageSource.gallery);
+  var image;
+
+  Future<void> pickImage() async {
+    final img = await _picker.pickImage(source: ImageSource.gallery);
+
+    setState(() {
+      image = File(img.path);
+    });
   }
-  Future<XFile> captureImage() async{
-    return await  _picker.pickImage(source: ImageSource.camera);
+
+  Future<void> captureImage() async {
+    final img = await _picker.pickImage(source: ImageSource.camera);
+    setState(() {
+      image = File(img.path);
+    });
+  }
+
+  Widget _chooseDisplay() {
+    if (image != null)
+      return Image.file(image);
+    else
+      return Text('Take an image',style: TextStyle(fontSize: 25),);
   }
 
   @override
@@ -20,18 +41,26 @@ class ReportPothole extends StatelessWidget {
       appBar: AppBar(
         title: Text('Report Pothole'),
       ),
-      body: Column(
-        children: [
-          RaisedButton(
-            child: Text('Take an image'),
-            onPressed: captureImage,
-          ),
-          SizedBox(height: 8.0),
-          RaisedButton(
-            child: Text('Select an image'),
-            onPressed: pickImage,
-          ),
-        ],
+      body: Center(
+        child: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.all(50),
+              child: _chooseDisplay(),
+            ),
+            ElevatedButton(
+              child: Text(
+                'Take an image'
+              ),
+              onPressed: captureImage,
+            ),
+            SizedBox(height: 8.0),
+            ElevatedButton(
+              child: Text('Select an image'),
+              onPressed: pickImage,
+            ),
+          ],
+        ),
       ),
     );
   }
