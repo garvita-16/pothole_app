@@ -12,7 +12,7 @@ class UserPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Admin Page'),
+        title: Text('User Page'),
         elevation: 2.0,
       ),
       backgroundColor: Colors.grey[200],

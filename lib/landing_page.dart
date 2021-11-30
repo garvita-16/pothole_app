@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:pothole_detection_app/sign_in_page.dart';
 import 'package:provider/provider.dart';
 
+import 'app/home_page.dart';
 import 'app/services/auth.dart';
+import 'app/services/database.dart';
 
 class LandingPage extends StatelessWidget {
   //const LandingPage({Key? key}) : super(key: key);
@@ -19,10 +21,11 @@ class LandingPage extends StatelessWidget {
           if (user == null) {
             return SignInPage();
           }
-          // return Provider<Database>(
-          //   create: (_) => FirestoreDatabase(uid: user.uid),
-          //     child: JobsPage(),
-          // );
+          print('$user');
+          return Provider<Database>(
+            create: (_) => FirestoreDatabase(uid: user.uid),
+            child: HomePage(),
+          );
         }
         return Scaffold(
           body: Center(
