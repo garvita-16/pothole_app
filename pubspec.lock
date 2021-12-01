@@ -289,6 +289,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.1+1"
+  scroll_indicator:
+    dependency: "direct main"
+    description:
+      name: scroll_indicator
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.3"
   sky_engine:
     dependency: transitive
     description: flutter
