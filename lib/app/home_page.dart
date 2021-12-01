@@ -72,7 +72,7 @@ class HomePage extends StatelessWidget {
          ),
           SizedBox(height: 8.0),
           RaisedButton(
-            onPressed:()=> _reportPothole(context) ,
+            onPressed:()=> ReportPothole.show(context),
             child: Text('Report Pothole',style: TextStyle(
               fontSize: 15.0,
               color: Colors.black,
