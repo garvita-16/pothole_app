@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pothole_detection_app/app/services/auth.dart';
 import 'package:pothole_detection_app/app/user/report_pothole.dart';
+import 'package:pothole_detection_app/app/user/status_of_report.dart';
 import 'package:provider/provider.dart';
 
 import 'custom_widgets/show_alert_diag.dart';
@@ -86,7 +87,7 @@ class HomePage extends StatelessWidget {
           ),
           SizedBox(height: 8.0),
           RaisedButton(
-            onPressed: (){},
+            onPressed:()=> StatusOfReport.show(context),
             child: Text('Status of Report',style: TextStyle(
               fontSize: 15.0,
               color: Colors.black,
@@ -102,14 +103,4 @@ class HomePage extends StatelessWidget {
       ),
     );
   }
-
-  void _reportPothole(BuildContext context){
-    Navigator.of(context).push(
-        MaterialPageRoute<void>(
-          fullscreenDialog: true,
-          builder:(context)=> ReportPothole(),
-        )
-    );
-  }
-
 }

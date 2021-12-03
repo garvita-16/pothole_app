@@ -10,6 +10,8 @@ abstract class Database{
   Stream<List<Report>> reportStream();
   Future<void> deleteReport(Report report);
   String getUid();
+  Future<void> createReportForAdmin(Report report);
+  Stream<List<Report>> reportAllStream();
 }
 String documentIdFromCurrentDate() => DateTime.now().toIso8601String();
 class FirestoreDatabase implements Database{
@@ -31,6 +33,20 @@ class FirestoreDatabase implements Database{
   Stream<List<Report>> reportStream(){
     return _service.collectionStream(
       path: APIpath.reports(uid),
+      builder: (data, documentId) => Report.fromMap(data, documentId),
+    );
+  }
+
+  @override
+  Future<void> createReportForAdmin(Report report) async => await _service.setData(
+    path: APIpath.adminPath(),
+    data: report.toMap(),
+  );
+
+  @override
+  Stream<List<Report>> reportAllStream(){
+    return _service.collectionStream(
+      path: APIpath.adminPath(),
       builder: (data, documentId) => Report.fromMap(data, documentId),
     );
   }

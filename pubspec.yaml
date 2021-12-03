@@ -37,6 +37,7 @@ dependencies:
   cloud_firestore: 3.1.0
   flutter_platform_widgets: ^1.11.1
   image_picker: ^0.8.4+4
+  firebase_analytics: ^8.3.4
   #for maps
   google_maps_flutter: ^2.1.1
   flutter_google_places: ^0.3.0

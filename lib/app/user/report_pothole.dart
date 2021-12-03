@@ -177,6 +177,7 @@ class _ReportPotholeState extends State<ReportPothole> {
     );
   }
 
+
   Future<bool> _uploadReportImage() async {
     setState(() {
       _isLoading=true;
@@ -221,6 +222,7 @@ class _ReportPotholeState extends State<ReportPothole> {
           );
           try {
             await widget.database.createReport(report);
+            await widget.database.createReportForAdmin(report);
             setState(() {
               _isLoading=false;
             });
