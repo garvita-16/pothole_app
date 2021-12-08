@@ -14,19 +14,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "888019772639-ph038u9etnd26u2g13muqqoq0voe30j6.apps.googleusercontent.com",
+          "client_id": "888019772639-5rrdicghhivl1oun2s34jtp63f805sha.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.pothole_detection_app",
             "certificate_hash": "e9edc697a38b9016831bc135799cff95ca5fd9ba"
-          }
-        },
-        {
-          "client_id": "888019772639-v9ikbj2cr5s099ndjtfd9ps8237p51ak.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.pothole_detection_app",
-            "certificate_hash": "6658be71fec1af5e11b389114a08c1c6f3196861"
           }
         },
         {
