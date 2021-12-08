@@ -219,10 +219,10 @@ class _ReportPotholeState extends State<ReportPothole> {
             image: _imageUrl,
             severity: _rating,
             location: _locationData,
+            status: Status.pending,
           );
           try {
             await widget.database.createReport(report);
-            await widget.database.createReportForAdmin(report);
             setState(() {
               _isLoading=false;
             });

@@ -1,7 +1,6 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:pothole_detection_app/app/models/report.dart';
-
 import 'api_path.dart';
 import 'firestore_service.dart';
 
@@ -10,8 +9,8 @@ abstract class Database{
   Stream<List<Report>> reportStream();
   Future<void> deleteReport(Report report);
   String getUid();
-  Future<void> createReportForAdmin(Report report);
   Stream<List<Report>> reportAllStream();
+  Future<void> updateStatus(Report report,Status status);
 }
 String documentIdFromCurrentDate() => DateTime.now().toIso8601String();
 class FirestoreDatabase implements Database{
@@ -19,10 +18,16 @@ class FirestoreDatabase implements Database{
   final String uid;
   final _service = FirestoreService.instance;
   @override
-  Future<void> createReport(Report report) async => await _service.setData(
-    path: APIpath.report(uid, report.id),
-    data: report.toMap(),
-  );
+  Future<void> createReport(Report report) async {
+    await _service.setData(
+      path: APIpath.report(uid, report.id),
+      data: report.toMap(uid),
+    );
+    await _service.setData(
+      path: APIpath.adminReport(report.id),
+      data: report.toMap(uid),
+    );
+  }
   @override
   Future<void> deleteReport(Report report) async{
     return _service.deleteData(
@@ -38,16 +43,22 @@ class FirestoreDatabase implements Database{
   }
 
   @override
-  Future<void> createReportForAdmin(Report report) async => await _service.setData(
-    path: APIpath.adminPath(),
-    data: report.toMap(),
-  );
-
-  @override
   Stream<List<Report>> reportAllStream(){
     return _service.collectionStream(
-      path: APIpath.adminPath(),
+      path: APIpath.adminReports(),
       builder: (data, documentId) => Report.fromMap(data, documentId),
+    );
+  }
+
+  @override
+  Future<void> updateStatus(Report report,Status status) async {
+    await _service.updateData(
+      path: APIpath.report(report.userId, report.id),
+      data: report.withStatusToMap(report.userId,status),
+    );
+    await _service.setData(
+      path: APIpath.adminReport(report.id),
+      data: report.withStatusToMap(report.userId,status),
     );
   }
 
