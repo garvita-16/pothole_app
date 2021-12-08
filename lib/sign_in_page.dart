@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:pothole_detection_app/app/custom_widgets/custom_button.dart';
+import 'package:pothole_detection_app/app/globals.dart';
 import 'package:provider/provider.dart';
 
 import 'app/services/auth.dart';
+import 'app/sign_in/email_sign_in_page.dart';
 import 'app/sign_in/sign_in_with_phone.dart';
 
 class SignInPage extends StatefulWidget {
@@ -43,6 +45,7 @@ class _SignInPageState extends State<SignInPage> {
           const SizedBox(height: 8.0),
           CustomButton(
             text: 'Sign in with Email',
+            onPressed: ()=>_signInWithEmail(context),
           ),
           const SizedBox(height: 20.0),
           const SizedBox(
@@ -85,4 +88,19 @@ class _SignInPageState extends State<SignInPage> {
       builder: (context) => SignInWithPhone(),
     ));
   }
+
+  void _signInWithEmail(BuildContext context){
+    setState(() {
+      emailSignIn = true;
+    });
+    final auth = Provider.of<AuthBase>(context, listen: false);
+    Navigator.of(context).push(
+        MaterialPageRoute<void>(
+          fullscreenDialog: true,
+          builder: (context) => EmailSignInPage(),
+        )
+    );
+  }
 }
+
+

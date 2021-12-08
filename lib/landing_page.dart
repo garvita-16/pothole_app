@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:pothole_detection_app/app/admin/admin.dart';
+import 'package:pothole_detection_app/app/globals.dart';
 import 'package:pothole_detection_app/sign_in_page.dart';
 import 'package:provider/provider.dart';
 
@@ -24,7 +26,7 @@ class LandingPage extends StatelessWidget {
           print(user.toString());
           return Provider<Database>(
             create: (_) => FirestoreDatabase(uid: user.uid),
-            child: HomePage(),
+            child: emailSignIn ? AdminPage() : HomePage(),
           );
         }
         return Scaffold(
