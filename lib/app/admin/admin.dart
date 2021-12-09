@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:pothole_detection_app/app/admin/admin_show_report_details.dart';
 import 'package:pothole_detection_app/app/custom_widgets/show_alert_diag.dart';
 import 'package:pothole_detection_app/app/custom_widgets/show_exception_alert_diag.dart';
+import 'package:pothole_detection_app/app/globals.dart';
 import 'package:pothole_detection_app/app/models/report.dart';
 import 'package:pothole_detection_app/app/services/auth.dart';
 import 'package:pothole_detection_app/app/services/database.dart';
@@ -31,6 +32,7 @@ class AdminPage extends StatelessWidget {
         DefaultActionText: 'Logout',
         cancelActionText: 'Cancel');
     if (didRequestSignout == true) {
+      emailSignIn=false;
       _signOut(context);
     }
   }

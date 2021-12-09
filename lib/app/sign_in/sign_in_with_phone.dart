@@ -1,6 +1,7 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:pothole_detection_app/app/custom_widgets/custom_error_dialog.dart';
 import 'package:pothole_detection_app/app/services/auth.dart';
 import 'package:provider/provider.dart';
 class SignInWithPhone extends StatefulWidget {
@@ -63,10 +64,16 @@ class _SignInWithPhoneState extends State<SignInWithPhone> {
     ),
       SizedBox(height: 16.0),
       FlatButton(
-          onPressed: (){
+          onPressed: () async {
             final auth = Provider.of<AuthBase>(context, listen: false);
             final String phone = '+91' +  _phoneController.text;
-            return auth.loginUserUsingPhone (phone , context);
+            if(phone.length==13) {
+              await auth.loginUserUsingPhone(phone, context);
+            }
+            else
+              {
+                CustomErrorDialog.show(context: context,title: 'Incorrect Phone',message: 'Phone number should be 10 digits');
+              }
           },
           child: Text('Login',
           style: TextStyle(

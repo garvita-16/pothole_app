@@ -3,6 +3,7 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:pothole_detection_app/app/custom_widgets/custom_error_dialog.dart';
 import 'package:pothole_detection_app/app/home_page.dart';
 import 'package:pothole_detection_app/app/models/report.dart';
+import 'package:pothole_detection_app/app/models/user.dart';
 import 'package:pothole_detection_app/app/services/database.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
@@ -35,6 +36,7 @@ class _ReportPotholeState extends State<ReportPothole> {
   File _image;
   bool _isLoading = false;
   Map<dynamic, dynamic> _locationData;
+  final TextEditingController _nameController=TextEditingController();
 
   Future<void> pickImage() async {
     final img = await _picker.pickImage(source: ImageSource.gallery);
@@ -129,7 +131,7 @@ class _ReportPotholeState extends State<ReportPothole> {
                           ElevatedButton(
                               child: Text(
                                 "Change",
-                                style: TextStyle( fontSize: 15),
+                                style: TextStyle(fontSize: 15),
                               ),
                               onPressed: () {
                                 navigateAndDisplay(context);
@@ -137,7 +139,13 @@ class _ReportPotholeState extends State<ReportPothole> {
                         ],
                       ),
                     ),
-                    SizedBox(height: 20.0),
+                    SizedBox(height: 30.0),
+                    const Text(
+                      'Please Select Severity',
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(height: 10.0),
                     Slider(
                       activeColor: Colors.blue,
                       inactiveColor: Colors.black38,
@@ -158,7 +166,7 @@ class _ReportPotholeState extends State<ReportPothole> {
                       child: const Text(
                         'Submit',
                         style: TextStyle(
-                          fontSize: 15.0,
+                          fontSize: 20.0,
                           color: Colors.white,
                         ),
                       ),
@@ -170,10 +178,9 @@ class _ReportPotholeState extends State<ReportPothole> {
     );
   }
 
-
   Future<bool> _uploadReportImage() async {
     setState(() {
-      _isLoading=true;
+      _isLoading = true;
     });
     Reference storageReference = FirebaseStorage.instance.ref().child(
         'reports/${widget.database.getUid()}/${documentIdFromCurrentDate()}');
@@ -205,7 +212,8 @@ class _ReportPotholeState extends State<ReportPothole> {
   Future<void> _submit(BuildContext context) async {
     if (_image != null) {
       if (_locationData != null) {
-        if (await _uploadReportImage()) {
+        UserData _user=await widget.database.getUser();
+        if (_user!=null && _user.firstName!=null) {
           final id = documentIdFromCurrentDate();
           final report = Report(
             id: id,
@@ -214,27 +222,78 @@ class _ReportPotholeState extends State<ReportPothole> {
             location: _locationData,
             status: Status.pending,
           );
-          try {
-            await widget.database.createReport(report);
-            setState(() {
-              _isLoading=false;
-            });
-            await CustomErrorDialog.show(
-                context: context,
-                title: 'Upload Successful',
-                message: 'Successful');
-            Navigator.of(context).pop();
-          } catch (e) {
-            CustomErrorDialog.show(
-                context: context,
-                title: 'Upload Failed',
-                message: e.toString());
-          }
+          if(await _uploadReportImage())
+            {
+              try {
+                await widget.database.createReport(report);
+                UserData _updatedUser=UserData(
+                  firstName: _user.firstName,
+                  points: _user.points+10,
+                );
+                await widget.database.setUser(_updatedUser);
+                setState(() {
+                  _isLoading = false;
+                });
+                await CustomErrorDialog.show(
+                    context: context,
+                    title: 'Upload Successful',
+                    message: 'Successful');
+                Navigator.of(context).pop();
+              } catch (e) {
+                CustomErrorDialog.show(
+                    context: context,
+                    title: 'Upload Failed',
+                    message: e.toString());
+              }
+            }
+          else
+            {
+              CustomErrorDialog.show(
+                  context: context,
+                  title: 'Location Missing',
+                  message: 'Please Select Location');
+            }
         } else {
-          CustomErrorDialog.show(
-              context: context,
-              title: 'Location Missing',
-              message: 'Please Select Location');
+          showPlatformDialog(
+            context: context,
+            builder: (context) => PlatformAlertDialog(
+              title: Text('Enter your name'),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextField(
+                    controller: _nameController,
+                    decoration: InputDecoration(
+                      labelText: 'Name',
+                    ),
+                  )
+                ],
+              ),
+              actions: [
+                FlatButton(
+                  onPressed: () async {
+                    try {
+                      UserData newUser=UserData(
+                        firstName: _nameController.text,
+                        points: 0,
+                      );
+                      await widget.database.setUser(newUser);
+                      Navigator.of(context).pop();
+
+                    }
+                    catch(e)
+                    {
+                      print(e.toString());
+                      Navigator.of(context).pop();
+                    }
+                  },
+                  child: Text('ok',
+                      style: TextStyle(color: Colors.white, fontSize: 15.0)),
+                  color: Colors.indigo,
+                )
+              ],
+            ),
+          );
         }
       } else {
         CustomErrorDialog.show(

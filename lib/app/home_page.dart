@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pothole_detection_app/app/custom_widgets/custom_button.dart';
 import 'package:pothole_detection_app/app/services/auth.dart';
+import 'package:pothole_detection_app/app/user/leaderboard.dart';
 import 'package:pothole_detection_app/app/user/report_pothole.dart';
 import 'package:pothole_detection_app/app/user/status_of_report.dart';
 import 'package:provider/provider.dart';
@@ -61,7 +62,7 @@ class HomePage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () => Leaderboard.show(context),
             child: Text(
               'LeaderBoard',
               style: TextStyle(
