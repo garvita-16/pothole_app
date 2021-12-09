@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pothole_detection_app/app/custom_widgets/custom_button.dart';
 import 'package:pothole_detection_app/app/services/auth.dart';
 import 'package:pothole_detection_app/app/user/report_pothole.dart';
 import 'package:pothole_detection_app/app/user/status_of_report.dart';
@@ -28,6 +29,7 @@ class HomePage extends StatelessWidget {
       _signOut(context);
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,15 +38,15 @@ class HomePage extends StatelessWidget {
         elevation: 2.0,
         actions: [
           FlatButton(
-            child: Text('Logout',
-                style: TextStyle(
-                  fontSize: 18.0,
-                  color: Colors.white,
-                )),
-            onPressed: () {
-              return _confirmSignOut(context);
-            } //_confirmSignOut(context),
-          )
+              child: Text('Logout',
+                  style: TextStyle(
+                    fontSize: 18.0,
+                    color: Colors.white,
+                  )),
+              onPressed: () {
+                return _confirmSignOut(context);
+              } //_confirmSignOut(context),
+              )
         ],
       ),
       body: _buildContents(context),
@@ -58,44 +60,32 @@ class HomePage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-         RaisedButton(
-             onPressed: (){},
-           child: Text('LeaderBoard',style: TextStyle(
-             fontSize: 15.0,
-             color: Colors.black,
-           ),),
-           color: Colors.white,
-           shape: RoundedRectangleBorder(
-             borderRadius: BorderRadius.all(
-               Radius.circular(8.0),
-             ),
-           ),
-         ),
-          SizedBox(height: 8.0),
-          RaisedButton(
-            onPressed:()=> ReportPothole.show(context),
-            child: Text('Report Pothole',style: TextStyle(
-              fontSize: 15.0,
-              color: Colors.black,
-            ),),
-            color: Colors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(
-                Radius.circular(8.0),
+          ElevatedButton(
+            onPressed: () {},
+            child: Text(
+              'LeaderBoard',
+              style: TextStyle(
+                fontSize: 17.0,
               ),
             ),
           ),
-          SizedBox(height: 8.0),
-          RaisedButton(
-            onPressed:()=> StatusOfReport.show(context),
-            child: Text('Status of Report',style: TextStyle(
-              fontSize: 15.0,
-              color: Colors.black,
-            ),),
-            color: Colors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(
-                Radius.circular(8.0),
+          SizedBox(height: 30.0),
+          ElevatedButton(
+            onPressed: () => ReportPothole.show(context),
+            child: Text(
+              'Report Pothole',
+              style: TextStyle(
+                fontSize: 17.0,
+              ),
+            ),
+          ),
+          SizedBox(height: 30.0),
+          ElevatedButton(
+            onPressed: () => StatusOfReport.show(context),
+            child: Text(
+              'Status of Report',
+              style: TextStyle(
+                fontSize: 17.0,
               ),
             ),
           ),

@@ -96,9 +96,10 @@ class _ReportPotholeState extends State<ReportPothole> {
                       child: Text('Select an image'),
                       onPressed: pickImage,
                     ),
+                    SizedBox(height: 28.0),
                     Container(
                       color: Colors.grey[200],
-                      height: pH(30),
+                      height: pH(60),
                       padding: EdgeInsets.only(right: 8),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -121,32 +122,24 @@ class _ReportPotholeState extends State<ReportPothole> {
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                                 style: TextStyle(
+                                  fontSize: 15,
                                   fontWeight: FontWeight.bold,
                                 )),
                           ]),
-                          Container(
-                            margin: EdgeInsets.all(4),
-                            decoration: ShapeDecoration(
-                              color: Colors.white,
-                              shape: Border.all(color: Colors.blue),
-                            ),
-                            child: RaisedButton(
-                                color: Colors.white,
-                                child: Text(
-                                  "Change",
-                                  style: TextStyle(
-                                      color: Colors.blue, fontSize: 12),
-                                ),
-                                onPressed: () {
-                                  navigateAndDisplay(context);
-                                }),
-                          ),
+                          ElevatedButton(
+                              child: Text(
+                                "Change",
+                                style: TextStyle( fontSize: 15),
+                              ),
+                              onPressed: () {
+                                navigateAndDisplay(context);
+                              }),
                         ],
                       ),
                     ),
                     SizedBox(height: 20.0),
                     Slider(
-                      activeColor: Colors.red,
+                      activeColor: Colors.blue,
                       inactiveColor: Colors.black38,
                       value: _rating,
                       min: 0.0,

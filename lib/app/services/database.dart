@@ -30,8 +30,11 @@ class FirestoreDatabase implements Database{
   }
   @override
   Future<void> deleteReport(Report report) async{
-    return _service.deleteData(
+    await _service.deleteData(
       path: APIpath.report(uid,report.id),
+    );
+    return await _service.deleteData(
+      path: APIpath.adminReport(report.id),
     );
   }
   @override
@@ -56,7 +59,7 @@ class FirestoreDatabase implements Database{
       path: APIpath.report(report.userId, report.id),
       data: report.withStatusToMap(report.userId,status),
     );
-    await _service.setData(
+    await _service.updateData(
       path: APIpath.adminReport(report.id),
       data: report.withStatusToMap(report.userId,status),
     );
