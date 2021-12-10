@@ -3,7 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:pothole_detection_app/app/custom_widgets/custom_error_dialog.dart';
 import 'package:pothole_detection_app/app/custom_widgets/show_alert_diag.dart';
+import 'package:pothole_detection_app/landing_page.dart';
 
 import '../home_page.dart';
 
@@ -14,7 +16,7 @@ abstract class AuthBase {
   Future<User> signInWithGoogle();
   Future<User> signInWithEmailAndPassword(String email, String password);
   Future<User> createUserWithEmailAndPassword(String email, String password);
-  Future<bool> loginUserUsingPhone(String phone, BuildContext context);
+  Future<void> loginUserUsingPhone(String phone, BuildContext context);
 }
 
 class Auth implements AuthBase {
@@ -104,16 +106,25 @@ class Auth implements AuthBase {
   //   }
   // }
 
-  Future<bool> loginUserUsingPhone(String phone, BuildContext context) async {
+  @override
+  Future<void> loginUserUsingPhone(String phone, BuildContext context) async {
     FirebaseAuth auth = FirebaseAuth.instance;
     dynamic userCredential = null;
     auth.verifyPhoneNumber(
       phoneNumber: phone,
       timeout: Duration(seconds: 60),
       verificationCompleted: (AuthCredential credential) async {
-        userCredential = await _firebaseAuth.signInWithCredential(credential);
-        final user = userCredential.user;
-        return user;
+        try {
+          userCredential = await _firebaseAuth.signInWithCredential(credential);
+        }
+        catch(e)
+        {
+          print(e.toString());
+          CustomErrorDialog.show(
+              context: context,
+              title: 'Error',
+              message: e.toString());
+        }
       },
       verificationFailed: (FirebaseAuthException exception) {
         print(exception.toString());
@@ -129,25 +140,28 @@ class Auth implements AuthBase {
                   children: [
                     TextField(
                       controller: _codeController,
+                      keyboardType: TextInputType.phone,
+                      decoration: InputDecoration(
+                        labelText: 'Otp',
+                      ),
                     )
                   ],
                 ),
                 actions: [
                   FlatButton(
                     onPressed: () async {
-                      final code = _codeController.text.trim();
-                      final credential = PhoneAuthProvider.credential(
-                          verificationId: verificationId, smsCode: code);
-                      userCredential =
-                          await _firebaseAuth.signInWithCredential(credential);
-                      final user = userCredential.user;
-                      if (user != null) {
-                        Navigator.of(context).push(MaterialPageRoute<void>(
-                          fullscreenDialog: true,
-                          builder: (context) => HomePage(),
-                        ));
-                      } else {
-                        print('user is null');
+                      try {
+                        final code = _codeController.text.trim();
+                        final credential = PhoneAuthProvider.credential(
+                            verificationId: verificationId, smsCode: code);
+                        userCredential = await _firebaseAuth.signInWithCredential(credential);
+                        Navigator.of(context).pop();
+                        Navigator.of(context).pop();
+                      }
+                      catch(e)
+                      {
+                        print(e.toString());
+                        _codeController.text='Invalid Otp';
                         Navigator.of(context).pop();
                       }
                     },
@@ -161,7 +175,6 @@ class Auth implements AuthBase {
       },
       // codeAutoRetrievalTimeout: codeAutoRetrievalTimeout
     );
-    return userCredential.user;
   }
 
   @override

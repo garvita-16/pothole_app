@@ -5,20 +5,24 @@ import 'package:pothole_detection_app/app/models/report.dart';
 import 'package:pothole_detection_app/app/services/database.dart';
 import 'package:provider/provider.dart';
 
-class ShowReportDetails extends StatefulWidget {
+class AdminShowReportDetails extends StatefulWidget {
   //const AddJobPage({Key? key}) : super(key: key);
-  const ShowReportDetails({Key key, @required this.database, this.report})
+  const AdminShowReportDetails({Key key, @required this.database, this.report})
       : super(key: key);
   final Database database;
   final Report report;
   @override
-  _ShowReportDetailsState createState() => _ShowReportDetailsState();
+  _AdminShowReportDetailsState createState() => _AdminShowReportDetailsState();
 }
 
-class _ShowReportDetailsState extends State<ShowReportDetails> {
+class _AdminShowReportDetailsState extends State<AdminShowReportDetails> {
   bool _isLoading = true;
+  String dropdownValue;
+
   @override
   Widget build(BuildContext context) {
+    dropdownValue = dropdownValue==null?statusToString(widget.report.status):dropdownValue;
+
     return Scaffold(
       appBar: AppBar(
         elevation: 2.0,
@@ -91,12 +95,41 @@ class _ShowReportDetailsState extends State<ShowReportDetails> {
             SizedBox(height: 10.0),
             Container(
               child: Center(
-                child: Text(
-                  'Status : ${statusToString(widget.report.status)}',
-                  style: TextStyle(
-                    fontSize: 15.0,
-                    color: Colors.black,
-                  ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Status : ',
+                      style: TextStyle(
+                        fontSize: 15.0,
+                        color: Colors.black,
+                      ),
+                    ),
+                    DropdownButton<String>(
+                      value: dropdownValue,
+                      icon: const Icon(Icons.arrow_downward),
+                      iconSize: 24,
+                      elevation: 16,
+                      style: const TextStyle(color: Colors.deepPurple),
+                      underline: Container(
+                        height: 2,
+                        color: Colors.deepPurpleAccent,
+                      ),
+                      onChanged: (newValue) async {
+                        setState(() {
+                          dropdownValue = newValue;
+                        });
+                        await widget.database.updateStatus(widget.report,stringToStatus(newValue));
+                      },
+                      items: <String>['pending', 'accepted', 'completed', 'declined']
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                  ],
                 ),
               ),
             ),
