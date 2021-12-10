@@ -5,6 +5,7 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:pothole_detection_app/app/custom_widgets/custom_error_dialog.dart';
 import 'package:pothole_detection_app/app/custom_widgets/show_alert_diag.dart';
+import 'package:pothole_detection_app/landing_page.dart';
 
 import '../home_page.dart';
 
@@ -105,6 +106,7 @@ class Auth implements AuthBase {
   //   }
   // }
 
+  @override
   Future<void> loginUserUsingPhone(String phone, BuildContext context) async {
     FirebaseAuth auth = FirebaseAuth.instance;
     dynamic userCredential = null;
@@ -138,6 +140,7 @@ class Auth implements AuthBase {
                   children: [
                     TextField(
                       controller: _codeController,
+                      keyboardType: TextInputType.phone,
                       decoration: InputDecoration(
                         labelText: 'Otp',
                       ),
@@ -152,14 +155,8 @@ class Auth implements AuthBase {
                         final credential = PhoneAuthProvider.credential(
                             verificationId: verificationId, smsCode: code);
                         userCredential = await _firebaseAuth.signInWithCredential(credential);
-                        if(userCredential==null)
-                          {
-                            CustomErrorDialog.show(
-                                context: context,
-                                title: 'Error',
-                                message: 'Invalid Otp');
-                            Navigator.of(context).pop();
-                          }
+                        Navigator.of(context).pop();
+                        Navigator.of(context).pop();
                       }
                       catch(e)
                       {

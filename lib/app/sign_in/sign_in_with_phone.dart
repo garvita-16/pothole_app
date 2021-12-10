@@ -1,6 +1,7 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:pothole_detection_app/app/custom_widgets/custom_error_dialog.dart';
 import 'package:pothole_detection_app/app/services/auth.dart';
 import 'package:provider/provider.dart';
@@ -59,6 +60,7 @@ class _SignInWithPhoneState extends State<SignInWithPhone> {
       //onSaved: (value) => _name = value,
       //focusNode: _nameFocus,
       //onEditingComplete: _changeFocus,
+      keyboardType: TextInputType.phone,
       textInputAction: TextInputAction.next,
       controller: _phoneController,
     ),
