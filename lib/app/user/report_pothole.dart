@@ -229,6 +229,7 @@ class _ReportPotholeState extends State<ReportPothole> {
                 UserData _updatedUser=UserData(
                   firstName: _user.firstName,
                   points: _user.points+10,
+                  isAdmin: false,
                 );
                 await widget.database.setUser(_updatedUser);
                 setState(() {
@@ -276,6 +277,7 @@ class _ReportPotholeState extends State<ReportPothole> {
                       UserData newUser=UserData(
                         firstName: _nameController.text,
                         points: 0,
+                        isAdmin: false,
                       );
                       await widget.database.setUser(newUser);
                       Navigator.of(context).pop();

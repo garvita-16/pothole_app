@@ -6,4 +6,6 @@ class APIpath{
   static String user(String uid) => '/users/$uid';
   static String adminReport(String reportid) => '/reports/$reportid';
   static String adminReports() => '/reports';
+  static String userString() => '/userReport';
+  static String userReport(String uid) => '/userReport/$uid';
 }

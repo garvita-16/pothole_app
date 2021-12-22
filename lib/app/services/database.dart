@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:pothole_detection_app/app/models/report.dart';
 import 'package:pothole_detection_app/app/models/user.dart';
@@ -31,6 +32,17 @@ class FirestoreDatabase implements Database {
     await _service.setData(
       path: APIpath.adminReport(report.id),
       data: report.toMap(uid),
+    );
+  }
+
+  @override
+  Future<void> createUserReport(bool isAdmin ) async{
+    Map<String,bool>data = {
+      uid : isAdmin,
+    };
+    await _service.setData(
+        path: APIpath.userReport(uid),
+        data: data,
     );
   }
 
