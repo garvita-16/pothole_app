@@ -20,8 +20,9 @@ class _SignInPageState extends State<SignInPage> {
       appBar: AppBar(
         elevation: 2.0,
         title: Text('Pothole App'),
+        backgroundColor: Color(0xff14DAE2),
       ),
-      backgroundColor: Colors.grey[200],
+      backgroundColor: Color(0xff251F34),
       body: _buildContainer(context),
     );
   }
@@ -38,6 +39,7 @@ class _SignInPageState extends State<SignInPage> {
             child: Text('Sign in as admin',
                 textAlign: TextAlign.center,
                 style: TextStyle(
+                  color: Colors.white,
                   fontSize: 20.0,
                   fontWeight: FontWeight.w600,
                 )),
@@ -46,6 +48,7 @@ class _SignInPageState extends State<SignInPage> {
           CustomButton(
             text: 'Sign in with Email',
             onPressed: ()=>_signInWithEmail(context),
+            backgroundColor: Color(0xfff3B324E),
           ),
           const SizedBox(height: 20.0),
           const SizedBox(
@@ -53,6 +56,7 @@ class _SignInPageState extends State<SignInPage> {
             child: Text('Sign in/Sign up as user',
                 textAlign: TextAlign.center,
                 style: TextStyle(
+                  color: Colors.white,
                   fontSize: 20.0,
                   fontWeight: FontWeight.w600,
                 )),
@@ -60,11 +64,13 @@ class _SignInPageState extends State<SignInPage> {
           const SizedBox(height: 8.0),
           CustomButton(
             text: 'Sign in with Google',
+            backgroundColor:Color(0xfff3B324E), //Color(0xfff3B324E),
             onPressed: () => _signInWithGoogle(context),
           ),
           const SizedBox(height: 8.0),
           CustomButton(
             text: 'Sign in with Phone Number',
+            backgroundColor: Color(0xfff3B324E),
             onPressed: () => _signInWithPhoneNumber(context),
           ),
           const SizedBox(height: 8.0),

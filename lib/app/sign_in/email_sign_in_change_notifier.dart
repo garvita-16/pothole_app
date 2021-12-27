@@ -72,13 +72,19 @@ class _EmailSignInFormChangeNotifierState extends State<EmailSignInFormChangeNot
 
   List<Widget> _buildChildren() {
     return [
+      Text('Sign in',
+        style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w600,
+            fontSize: 20,
+        ),),
+      SizedBox(height: 25.0),
       _buildEmailTextField(),
-      SizedBox(height: 8.0),
+      SizedBox(height: 25.0),
       _buildPasswordTextField(),
-      SizedBox(height: 8.0),
+      SizedBox(height: 25.0),
       FormSubmitButton(
         text: 'Sign in',
-
         onPressed: model.canSubmit
             ? _submit
             : () {
@@ -87,6 +93,7 @@ class _EmailSignInFormChangeNotifierState extends State<EmailSignInFormChangeNot
           print(model.password);
           print(!model.isloading);
         },
+
         //onPressed: _submit,
       ),
       SizedBox(height: 8.0),
@@ -95,12 +102,25 @@ class _EmailSignInFormChangeNotifierState extends State<EmailSignInFormChangeNot
 
   TextField _buildPasswordTextField() {
     return TextField(
+      style: (TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.w400
+      )),
       decoration: InputDecoration(
         labelText: 'Password',
+        labelStyle: TextStyle(
+          color: Colors.white,
+        ),
         errorText: model.passwordErrorText,
         enabled: model.isloading == false,
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Color(0xff14DAE2), width: 2.0),
+          borderRadius: BorderRadius.all(Radius.circular(20.0)),
+        ),
       ),
+
       obscureText: true,
+      cursorColor: Colors.white,
       controller: _passwordController,
       focusNode: _passwordFocus,
       textInputAction: TextInputAction.done,
@@ -113,17 +133,29 @@ class _EmailSignInFormChangeNotifierState extends State<EmailSignInFormChangeNot
     return TextField(
       decoration: InputDecoration(
         labelText: 'Email',
+        labelStyle: TextStyle(
+          color: Colors.white,
+        ),
         hintText: 'test@test.com',
         errorText: model.emailErrorText,
         enabled: model.isloading == false,
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Color(0xff14DAE2), width: 2.0),
+          borderRadius: BorderRadius.all(Radius.circular(20.0)),
+        ),
       ),
       controller: _emailController,
       focusNode: _emailFocus,
+      cursorColor: Colors.white,
       autocorrect: false,
       keyboardType: TextInputType.emailAddress,
       textInputAction: TextInputAction.next,
       onEditingComplete: () => _emailFocusNode(),
       onChanged: model.updateEmail,
+      style: (TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.w400
+      )),
     );
   }
 

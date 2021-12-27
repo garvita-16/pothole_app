@@ -134,15 +134,18 @@ class Auth implements AuthBase {
             context: context,
             builder: (context) {
               return AlertDialog(
-                title: Text('Give the code'),
+                title: Text('Give the code',style: TextStyle(color: Colors.white)),
+                backgroundColor: Color(0xff251F34),
                 content: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     TextField(
+                      style: TextStyle(color: Colors.white),
                       controller: _codeController,
                       keyboardType: TextInputType.phone,
                       decoration: InputDecoration(
                         labelText: 'Otp',
+                        labelStyle: TextStyle(color: Colors.white)
                       ),
                     )
                   ],
@@ -160,14 +163,16 @@ class Auth implements AuthBase {
                       }
                       catch(e)
                       {
-                        print(e.toString());
-                        _codeController.text='Invalid Otp';
                         Navigator.of(context).pop();
+                        CustomErrorDialog.show(
+                            context: context,
+                            title: 'Invalid Otp',
+                            message: 'Try again');
                       }
                     },
                     child: Text('confirm',
                         style: TextStyle(color: Colors.white, fontSize: 15.0)),
-                    color: Colors.indigo,
+                    color: Color(0xff14DAE2),
                   )
                 ],
               );

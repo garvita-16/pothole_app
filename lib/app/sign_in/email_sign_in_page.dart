@@ -12,18 +12,29 @@ class EmailSignInPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Sign In'),
-        elevation: 2.0,
+        elevation: 0,
+        leading: _goBackButton(context),
+        backgroundColor: Color(0xff251F34),
       ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Card(
               child: EmailSignInFormChangeNotifier.create(context) ,
+            color: Color(0xfff3B324E),
           ),
         ),
       ),
-      backgroundColor: Colors.grey[200],
+      backgroundColor: Color(0xff251F34),
     );
+  }
+
+
+  Widget _goBackButton(BuildContext context) {
+    return IconButton(
+        icon: Icon(Icons.arrow_back, color: Colors.grey[350]),
+        onPressed: () {
+          Navigator.of(context).pop(true);
+        });
   }
 }

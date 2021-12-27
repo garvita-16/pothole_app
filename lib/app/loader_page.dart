@@ -38,7 +38,7 @@ class _LoaderPageState extends State<LoaderPage> {
     }
     else{
       Database database = Provider.of<Database>(context, listen: false);
-      return isAdmin ? AdminPage() : HomePage();
+      return isAdmin ? AdminPage() : HomePage(database: database);
     }
   }
 }

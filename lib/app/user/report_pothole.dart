@@ -59,7 +59,7 @@ class _ReportPotholeState extends State<ReportPothole> {
     else
       return Text(
         'Take an image',
-        style: TextStyle(fontSize: 25),
+        style: TextStyle(fontSize: 25, color: Colors.white),
       );
   }
 
@@ -76,7 +76,10 @@ class _ReportPotholeState extends State<ReportPothole> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Report Pothole'),
+        backgroundColor: Color(0xff14DAE2),
+        elevation: 2.0,
       ),
+      backgroundColor: Color(0xff251F34),
       body: _isLoading
           ? Center(
               child: CircularProgressIndicator(),
@@ -90,17 +93,21 @@ class _ReportPotholeState extends State<ReportPothole> {
                       child: _chooseDisplay(),
                     ),
                     ElevatedButton(
-                      child: Text('Take an image'),
+                      child: Text('Take an image', style: TextStyle(color: Colors.white),),
                       onPressed: captureImage,
+                      style: ElevatedButton.styleFrom(primary:Color(0xfff3B324E),
+                        shadowColor: Color(0xff14DAE2),),
                     ),
                     SizedBox(height: 8.0),
                     ElevatedButton(
-                      child: Text('Select an image'),
+                      child: Text('Select an image', style: TextStyle(color: Colors.white)),
                       onPressed: pickImage,
+                      style: ElevatedButton.styleFrom(primary:Color(0xfff3B324E),
+                        shadowColor: Color(0xff14DAE2),),
                     ),
                     SizedBox(height: 28.0),
                     Container(
-                      color: Colors.grey[200],
+                      color: Color(0xfff3B324E),
                       height: pH(60),
                       padding: EdgeInsets.only(right: 8),
                       child: Row(
@@ -126,6 +133,7 @@ class _ReportPotholeState extends State<ReportPothole> {
                                 style: TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.bold,
+                                  color: Colors.white,
                                 )),
                           ]),
                           ElevatedButton(
@@ -133,6 +141,8 @@ class _ReportPotholeState extends State<ReportPothole> {
                                 "Change",
                                 style: TextStyle(fontSize: 15),
                               ),
+                              style: ElevatedButton.styleFrom(primary: Color(0xff14DAE2),
+                                shadowColor: Color(0xff14DAE2),),
                               onPressed: () {
                                 navigateAndDisplay(context);
                               }),
@@ -143,12 +153,12 @@ class _ReportPotholeState extends State<ReportPothole> {
                     const Text(
                       'Please Select Severity',
                       style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
                     ),
                     SizedBox(height: 10.0),
                     Slider(
-                      activeColor: Colors.blue,
-                      inactiveColor: Colors.black38,
+                      activeColor: Color(0xff14DAE2),
+                      inactiveColor: Colors.white,
                       value: _rating,
                       min: 0.0,
                       max: 5.0,
@@ -170,6 +180,8 @@ class _ReportPotholeState extends State<ReportPothole> {
                           color: Colors.white,
                         ),
                       ),
+                      style: ElevatedButton.styleFrom(primary: Color(0xff14DAE2),
+                        shadowColor: Color(0xff14DAE2),),
                     ),
                   ],
                 ),
@@ -215,20 +227,21 @@ class _ReportPotholeState extends State<ReportPothole> {
         UserData _user=await widget.database.getUser();
         if (_user!=null && _user.firstName!=null) {
           final id = documentIdFromCurrentDate();
-          final report = Report(
-            id: id,
-            image: _imageUrl,
-            severity: _rating,
-            location: _locationData,
-            status: Status.pending,
-          );
           if(await _uploadReportImage())
             {
+              final report = Report(
+                id: id,
+                image: _imageUrl,
+                severity: _rating,
+                location: _locationData,
+                status: Status.pending,
+              );
               try {
                 await widget.database.createReport(report);
+                print("report submitted");
                 UserData _updatedUser=UserData(
                   firstName: _user.firstName,
-                  points: _user.points+10,
+                  points: _user.points,
                   isAdmin: false,
                 );
                 await widget.database.setUser(_updatedUser);
@@ -251,21 +264,30 @@ class _ReportPotholeState extends State<ReportPothole> {
             {
               CustomErrorDialog.show(
                   context: context,
-                  title: 'Location Missing',
-                  message: 'Please Select Location');
+                  title: 'Upload Failed',
+                  message: 'please upload image');
             }
         } else {
           showPlatformDialog(
             context: context,
-            builder: (context) => PlatformAlertDialog(
-              title: Text('Enter your name'),
+            builder: (context) => AlertDialog(
+              title: Text('Enter your name', style: TextStyle(
+                color: Colors.white,
+              ),),
+              backgroundColor: Color(0xff251F34),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   TextField(
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
                     controller: _nameController,
                     decoration: InputDecoration(
                       labelText: 'Name',
+                      labelStyle: TextStyle(
+                        color: Colors.white,
+                      )
                     ),
                   )
                 ],
@@ -291,7 +313,7 @@ class _ReportPotholeState extends State<ReportPothole> {
                   },
                   child: Text('ok',
                       style: TextStyle(color: Colors.white, fontSize: 15.0)),
-                  color: Colors.indigo,
+                  color: Color(0xff14DAE2),
                 )
               ],
             ),
@@ -300,8 +322,8 @@ class _ReportPotholeState extends State<ReportPothole> {
       } else {
         CustomErrorDialog.show(
             context: context,
-            title: 'Failed to upload image',
-            message: 'Please try again');
+            title: 'Location Missing',
+            message: 'Please Select Location');
       }
     } else {
       CustomErrorDialog.show(

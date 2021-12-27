@@ -23,9 +23,10 @@ class JobListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text('Date - '+idToDate(report.id)+' -----> '+statusToString(report.status)),
-      subtitle: Text('Time - '+idToTime(report.id)),
-      trailing: Icon(Icons.chevron_right),
+      title: Text('Date - '+idToDate(report.id)+' -----> '+statusToString(report.status),
+        style: TextStyle(color: Colors.white),),
+      subtitle: Text('Time - '+idToTime(report.id), style: TextStyle(color: Colors.white),),
+      trailing: Icon(Icons.chevron_right, color: Colors.white,),
       onTap: onTap,
     );
   }

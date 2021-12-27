@@ -5,7 +5,7 @@ class CustomButton extends StatelessWidget {
   CustomButton(
       {@required this.text,
       this.backgroundColor = Colors.white,
-      this.textColor = Colors.black,
+      this.textColor = Colors.white,
       this.onPressed});
   final String text;
   Color textColor;

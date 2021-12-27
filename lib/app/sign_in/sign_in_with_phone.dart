@@ -22,9 +22,10 @@ class _SignInWithPhoneState extends State<SignInWithPhone> {
       appBar: AppBar(
         elevation: 2.0,
         title: Text('Sign in'),
+        backgroundColor: Color(0xff14DAE2),
       ),
       body: _buildContainer(context),
-      backgroundColor: Colors.grey[200],
+      backgroundColor: Color(0xff251F34),
     );
   }
   Widget _buildContainer(BuildContext context) {
@@ -36,6 +37,7 @@ class _SignInWithPhoneState extends State<SignInWithPhone> {
             padding: const EdgeInsets.all(16.0),
             child: _buildForm(),
           ),
+          color: Color(0xfff3B324E),
         ),
       ),
     );
@@ -52,8 +54,16 @@ class _SignInWithPhoneState extends State<SignInWithPhone> {
     return [
     TextField(
 
+      style: TextStyle(color: Colors.white),
       decoration: InputDecoration(
         labelText: 'Phone Number',
+        labelStyle: TextStyle(
+          color: Colors.white,
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Color(0xff14DAE2), width: 2.0),
+          borderRadius: BorderRadius.all(Radius.circular(20.0)),
+        ),
         enabled: isLoading == false,
       ),
       //initialValue: _name,
@@ -83,7 +93,7 @@ class _SignInWithPhoneState extends State<SignInWithPhone> {
             fontSize: 15.0,
           ),
           ),
-        color: Colors.indigo,
+        color: Color(0xff14DAE2),
       )
     ];
   }

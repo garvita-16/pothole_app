@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:pothole_detection_app/app/models/report.dart';
+import 'package:pothole_detection_app/app/models/user.dart';
 import 'package:pothole_detection_app/app/services/database.dart';
 import 'package:provider/provider.dart';
 
@@ -27,9 +28,10 @@ class _AdminShowReportDetailsState extends State<AdminShowReportDetails> {
       appBar: AppBar(
         elevation: 2.0,
         title: Text('Report Details'),
+        backgroundColor: Color(0xff14DAE2),
       ),
       body: _buildContent(context),
-      backgroundColor: Colors.white,
+      backgroundColor: Color(0xff251F34),
     );
   }
 
@@ -51,7 +53,7 @@ class _AdminShowReportDetailsState extends State<AdminShowReportDetails> {
                   'Severity : ${widget.report.severity}',
                   style: TextStyle(
                     fontSize: 15.0,
-                    color: Colors.black,
+                    color: Colors.white,
                   ),
                 ),
               ),
@@ -63,7 +65,7 @@ class _AdminShowReportDetailsState extends State<AdminShowReportDetails> {
                   'Location : ${widget.report.location['address']}',
                   style: TextStyle(
                     fontSize: 15.0,
-                    color: Colors.black,
+                    color: Colors.white,
                   ),
                 ),
               ),
@@ -75,7 +77,7 @@ class _AdminShowReportDetailsState extends State<AdminShowReportDetails> {
                   'Latitude : ${widget.report.location['latitude']}',
                   style: TextStyle(
                     fontSize: 15.0,
-                    color: Colors.black,
+                    color: Colors.white,
                   ),
                 ),
               ),
@@ -87,7 +89,7 @@ class _AdminShowReportDetailsState extends State<AdminShowReportDetails> {
                   'Longitude : ${widget.report.location['longitude']}',
                   style: TextStyle(
                     fontSize: 15.0,
-                    color: Colors.black,
+                    color: Colors.white,
                   ),
                 ),
               ),
@@ -102,24 +104,35 @@ class _AdminShowReportDetailsState extends State<AdminShowReportDetails> {
                       'Status : ',
                       style: TextStyle(
                         fontSize: 15.0,
-                        color: Colors.black,
+                        color: Colors.white,
                       ),
                     ),
                     DropdownButton<String>(
                       value: dropdownValue,
-                      icon: const Icon(Icons.arrow_downward),
+                      icon: const Icon(Icons.arrow_downward, color:  Color(0xff14DAE2)),
                       iconSize: 24,
                       elevation: 16,
-                      style: const TextStyle(color: Colors.deepPurple),
+                      style: const TextStyle(color:  Color(0xff14DAE2)),
                       underline: Container(
                         height: 2,
-                        color: Colors.deepPurpleAccent,
+                        color:  Color(0xff14DAE2),
                       ),
                       onChanged: (newValue) async {
                         setState(() {
                           dropdownValue = newValue;
                         });
                         await widget.database.updateStatus(widget.report,stringToStatus(newValue));
+                        UserData _user=await widget.database.getUserToUpdate(widget.report.userId);
+                        int points =0;
+                        if(newValue == 'accepted'){
+                          points = 10;
+                        }
+                        UserData _updatedUser=UserData(
+                          firstName: _user.firstName,
+                          points:  _user.points + points,
+                          isAdmin: false,
+                        );
+                        await widget.database.updateUser(widget.report.userId,_updatedUser);
                       },
                       items: <String>['pending', 'accepted', 'completed', 'declined']
                           .map<DropdownMenuItem<String>>((String value) {

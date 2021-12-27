@@ -15,6 +15,8 @@ abstract class Database {
   Stream<List<Report>> reportAllStream();
   Stream<List<UserData>> userStream();
   Future<void> updateStatus(Report report, Status status);
+  Future<void> updateUser(String userid , UserData user);
+  Future<UserData> getUserToUpdate(String userid);
 }
 
 String documentIdFromCurrentDate() => DateTime.now().toIso8601String();
@@ -105,10 +107,25 @@ class FirestoreDatabase implements Database {
   }
 
   @override
+  Future<UserData> getUserToUpdate(String userid) async {
+    final snapshot =
+    await _service.getData(path: APIpath.users(), documentId: userid);
+    return UserData.fromMap(snapshot.data());
+  }
+
+  @override
   Future<void> setUser(UserData user) async {
     await _service.setData(
       path: APIpath.user(uid),
       data: user.toMap(),
     );
   }
+  @override
+  Future<void> updateUser(String userid , UserData user) async {
+    await _service.setData(
+      path: APIpath.user(userid),
+      data: user.toMap(),
+    );
+  }
+
 }
