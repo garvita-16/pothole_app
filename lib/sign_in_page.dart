@@ -31,10 +31,12 @@ class _SignInPageState extends State<SignInPage> {
     return Padding(
       padding: const EdgeInsets.all(32.0),
       child: SingleChildScrollView(
+
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            SizedBox(height: 100,),
             Image.asset('images/login.png', height: 160, width: 150,),
             const SizedBox(height: 20.0),
             const SizedBox(
