@@ -22,7 +22,9 @@ class _AdminShowReportDetailsState extends State<AdminShowReportDetails> {
 
   @override
   Widget build(BuildContext context) {
-    dropdownValue = dropdownValue==null?statusToString(widget.report.status):dropdownValue;
+    dropdownValue = dropdownValue == null
+        ? statusToString(widget.report.status)
+        : dropdownValue;
 
     return Scaffold(
       appBar: AppBar(
@@ -33,6 +35,14 @@ class _AdminShowReportDetailsState extends State<AdminShowReportDetails> {
       body: _buildContent(context),
       backgroundColor: Color(0xff251F34),
     );
+  }
+
+  int _prediction() {
+    if (widget.report.isPothole) {
+      return (widget.report.modelAccuracy * 100).ceil();
+    } else {
+      return 100 - (widget.report.modelAccuracy * 100).ceil();
+    }
   }
 
   Widget _buildContent(BuildContext context) {
@@ -97,6 +107,18 @@ class _AdminShowReportDetailsState extends State<AdminShowReportDetails> {
             SizedBox(height: 10.0),
             Container(
               child: Center(
+                child: Text(
+                  'Pothole : ${_prediction()}%',
+                  style: TextStyle(
+                    fontSize: 15.0,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: 10.0),
+            Container(
+              child: Center(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -109,33 +131,41 @@ class _AdminShowReportDetailsState extends State<AdminShowReportDetails> {
                     ),
                     DropdownButton<String>(
                       value: dropdownValue,
-                      icon: const Icon(Icons.arrow_downward, color:  Color(0xff14DAE2)),
+                      icon: const Icon(Icons.arrow_downward,
+                          color: Color(0xff14DAE2)),
                       iconSize: 24,
                       elevation: 16,
-                      style: const TextStyle(color:  Color(0xff14DAE2)),
+                      style: const TextStyle(color: Color(0xff14DAE2)),
                       underline: Container(
                         height: 2,
-                        color:  Color(0xff14DAE2),
+                        color: Color(0xff14DAE2),
                       ),
                       onChanged: (newValue) async {
                         setState(() {
                           dropdownValue = newValue;
                         });
-                        await widget.database.updateStatus(widget.report,stringToStatus(newValue));
-                        UserData _user=await widget.database.getUserToUpdate(widget.report.userId);
-                        int points =0;
-                        if(newValue == 'accepted'){
+                        await widget.database.updateStatus(
+                            widget.report, stringToStatus(newValue));
+                        UserData _user = await widget.database
+                            .getUserToUpdate(widget.report.userId);
+                        int points = 0;
+                        if (newValue == 'accepted') {
                           points = 10;
                         }
-                        UserData _updatedUser=UserData(
+                        UserData _updatedUser = UserData(
                           firstName: _user.firstName,
-                          points:  _user.points + points,
+                          points: _user.points + points,
                           isAdmin: false,
                         );
-                        await widget.database.updateUser(widget.report.userId,_updatedUser);
+                        await widget.database
+                            .updateUser(widget.report.userId, _updatedUser);
                       },
-                      items: <String>['pending', 'accepted', 'completed', 'declined']
-                          .map<DropdownMenuItem<String>>((String value) {
+                      items: <String>[
+                        'pending',
+                        'accepted',
+                        'completed',
+                        'declined'
+                      ].map<DropdownMenuItem<String>>((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
                           child: Text(value),

@@ -30,6 +30,14 @@ class _ShowReportDetailsState extends State<ShowReportDetails> {
     );
   }
 
+  int _prediction() {
+    if (widget.report.isPothole) {
+      return (widget.report.modelAccuracy * 100).ceil();
+    } else {
+      return 100 - (widget.report.modelAccuracy * 100).ceil();
+    }
+  }
+
   Widget _buildContent(BuildContext context) {
     return SingleChildScrollView(
       child: Padding(
@@ -82,6 +90,18 @@ class _ShowReportDetailsState extends State<ShowReportDetails> {
               child: Center(
                 child: Text(
                   'Longitude : ${widget.report.location['longitude']}',
+                  style: TextStyle(
+                    fontSize: 15.0,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: 10.0),
+            Container(
+              child: Center(
+                child: Text(
+                  'Pothole : ${_prediction()}%',
                   style: TextStyle(
                     fontSize: 15.0,
                     color: Colors.white,

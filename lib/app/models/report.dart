@@ -62,6 +62,8 @@ class Report {
     @required this.severity,
     @required this.location,
     @required this.status,
+    @required this.isPothole,
+    @required this.modelAccuracy,
     this.userId,
   });
   String id;
@@ -70,6 +72,8 @@ class Report {
   dynamic location;
   Status status;
   String userId;
+  bool isPothole;
+  double modelAccuracy;
   factory Report.fromMap(Map<String, dynamic> data, String documentId) {
     if (data == null) {
       return null;
@@ -79,6 +83,8 @@ class Report {
     final dynamic location = data['location'];
     final String status =data['status'];
     final String userId =data['userId'];
+    final bool isPothole =data['isPothole'];
+    final double modelAccuracy =data['modelAccuracy'];
     final Status st=stringToStatus(status);
     return Report(
       id: documentId,
@@ -87,6 +93,8 @@ class Report {
       location: location,
       status: st,
       userId: userId,
+      isPothole: isPothole,
+      modelAccuracy: modelAccuracy,
     );
   }
   Map<String, dynamic> toMap(String uid) {
@@ -96,6 +104,8 @@ class Report {
       'severity': severity,
       'status': statusToString(status),
       'userId': uid,
+      'isPothole': isPothole,
+      'modelAccuracy': modelAccuracy,
     };
   }
 
@@ -106,6 +116,8 @@ class Report {
       'severity': severity,
       'status': statusToString(status),
       'userId': uid,
+      'isPothole': isPothole,
+      'modelAccuracy': modelAccuracy,
     };
   }
 }
