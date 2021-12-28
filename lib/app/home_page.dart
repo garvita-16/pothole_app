@@ -12,11 +12,18 @@ import 'custom_widgets/custom_error_dialog.dart';
 import 'custom_widgets/show_alert_diag.dart';
 import 'models/user.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   //const HomePage({Key? key}) : super(key: key);
   HomePage({Key key, @required this.database}) : super(key: key);
   final Database database;
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   final _passCodeController = TextEditingController();
+
   final _nameController = TextEditingController();
 
   Future<void> _signOut(BuildContext context) async {
@@ -127,7 +134,7 @@ class HomePage extends StatelessWidget {
   }
 
   void _becomeAnAdmin(BuildContext context) {
-    showPlatformDialog(
+    showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
@@ -156,108 +163,114 @@ class HomePage extends StatelessWidget {
             ),
             actions: [
               ElevatedButton(
-                onPressed: () async {
-                  final code = _passCodeController.text.trim();
-                  Navigator.of(context, rootNavigator: true).pop();
-                  if (code == 'GARVITA') {
-                    UserData user = await database.getUser();
-                    if (user != null && user.firstName != null) {
-                      UserData _updatedUser = UserData(
-                        firstName: user.firstName,
-                        points: user.points,
-                        isAdmin: true,
-                      );
-                      await database.setUser(_updatedUser);
-                    } else {
-                     showPlatformDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                          title: Text('Enter your name', style: TextStyle(
-                            color: Colors.white,
-                          ),),
-                          backgroundColor: Color(0xfff3B324E),
-                          content: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              TextField(
-                                style: (TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w400
-                                )),
-                                controller: _nameController,
-                                decoration: InputDecoration(
-                                  labelText: 'Name',
-                                    labelStyle: TextStyle(
-                                      color: Colors.white,
-                                    )
-                                ),
-                              )
-                            ],
-                          ),
-                          actions: [
-                            FlatButton(
-                              onPressed: () async {
-                                try {
-                                  UserData newUser = UserData(
-                                    firstName: _nameController.text,
-                                    points: 0,
-                                    isAdmin: true,
-                                  );
-                                  await database.setUser(newUser);
-                                  Navigator.of(context).pop();
-                                } catch (e) {
-                                  print(e.toString());
-                                  Navigator.of(context).pop();
-                                }
-                              },
-                              child: Text('ok',
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 15.0)),
-                              color: Color(0xff14DAE2),
-                            )
-                          ],
-                        ),
-                      );
-                    }
-
-                    return showPlatformDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        title: Text('You have become an Admin', style: TextStyle(
-                          color: Colors.white,
-                        ),),
-                        backgroundColor: Color(0xfff3B324E),
-                        actions: [
-                          PlatformDialogAction(
-                            child: PlatformText('OK'),
-                            onPressed: Navigator.of(context).pop,
-                          ),
-                        ],
-                      ),
-                    );
-                  } else {
-                    return showPlatformDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        title: Text('Wrong PassCode', style: TextStyle(
-                          color: Colors.white,
-                        ),),
-                        backgroundColor: Color(0xfff3B324E),
-                        actions: [
-                          PlatformDialogAction(
-                            child: PlatformText('OK'),
-                            onPressed: Navigator.of(context).pop,
-                          ),
-                        ],
-                      ),
-                    );
-                  }
-                },
+                onPressed: ()=> _makeAdmin(context),
                 child: Text('confirm',
                     style: TextStyle(color: Colors.white, fontSize: 15.0)),
               ),
             ],
           );
         });
+  }
+
+  Future<void> _makeAdmin(BuildContext context) async{
+    {
+      final code = _passCodeController.text.trim();
+      if (code == 'GARVITA') {
+        UserData user = await widget.database.getUser();
+        if (user != null) {
+          UserData _updatedUser = UserData(
+            firstName: user.firstName,
+            points: user.points,
+            isAdmin: true,
+          );
+          await widget.database.setUser(_updatedUser);
+        } else {
+          showPlatformDialog<void>(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: Text('Enter your name', style: TextStyle(
+                color: Colors.white,
+              ),),
+              backgroundColor: Color(0xfff3B324E),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextField(
+                    style: (TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w400
+                    )),
+                    controller: _nameController,
+                    decoration: InputDecoration(
+                        labelText: 'Name',
+                        labelStyle: TextStyle(
+                          color: Colors.white,
+                        )
+                    ),
+                  )
+                ],
+              ),
+              actions: [
+                FlatButton(
+                  onPressed: () async {
+                    try {
+                      UserData newUser = UserData(
+                        firstName: _nameController.text,
+                        points: 0,
+                        isAdmin: true,
+                      );
+                      await widget.database.setUser(newUser);
+                      Navigator.of(context).pop();
+                      Navigator.of(context).pop();
+                    } catch (e) {
+                      print(e.toString());
+                      Navigator.of(context).pop();
+                    }
+                  },
+                  child: Text('ok',
+                      style: TextStyle(
+                          color: Colors.white, fontSize: 15.0)),
+                  color: Color(0xff14DAE2),
+                )
+              ],
+            ),
+
+          );
+        }
+
+        //TODO: fix this platform dialog
+        // showPlatformDialog(
+        //   context: context,
+        //   builder: (context) => AlertDialog(
+        //     title: Text('You have become an Admin', style: TextStyle(
+        //       color: Colors.white,
+        //     ),),
+        //     backgroundColor: Color(0xfff3B324E),
+        //     actions: [
+        //       PlatformDialogAction(
+        //         child: PlatformText('OK'),
+        //         onPressed: Navigator.of(context).pop,
+        //       ),
+        //     ],
+        //   ),
+        // );
+      } else {
+        showPlatformDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text('Wrong PassCode', style: TextStyle(
+              color: Colors.white,
+            ),),
+            backgroundColor: Color(0xfff3B324E),
+            actions: [
+              PlatformDialogAction(
+                child: PlatformText('OK'),
+                onPressed: Navigator.of(context).pop,
+              ),
+            ],
+          ),
+        );
+      }
+    }
   }
 }

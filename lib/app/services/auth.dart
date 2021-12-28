@@ -78,33 +78,6 @@ class Auth implements AuthBase {
     }
   }
 
-  // @override
-  // Future<User> signInWithGoogle() async {
-  //   final googleSignIn = GoogleSignIn();
-  //   final googleAccount = await googleSignIn.signIn();
-  //   if (googleAccount != null) {
-  //     final googleAuth = await googleAccount.authentication;
-  //     if (googleAuth.idToken != null && googleAuth.accessToken != null) {
-  //       final authResult = await _firebaseAuth.signInWithCredential(
-  //         GoogleAuthProvider.getCredential(
-  //           idToken: googleAuth.idToken,
-  //           accessToken: googleAuth.accessToken,
-  //         ),
-  //       );
-  //       return _userFromFirebase(authResult.user);
-  //     } else {
-  //       throw PlatformException(
-  //         code: 'ERROR_MISSING_GOOGLE_AUTH_TOKEN',
-  //         message: 'Missing Google Auth Token',
-  //       );
-  //     }
-  //   } else {
-  //     throw PlatformException(
-  //       code: 'ERROR_ABORTED_BY_USER',
-  //       message: 'Sign Aborted By User',
-  //     );
-  //   }
-  // }
 
   @override
   Future<void> loginUserUsingPhone(String phone, BuildContext context) async {

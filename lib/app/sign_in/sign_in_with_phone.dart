@@ -59,12 +59,14 @@ class _SignInWithPhoneState extends State<SignInWithPhone> {
         labelText: 'Phone Number',
         labelStyle: TextStyle(
           color: Colors.white,
+          fontSize: 15,
         ),
         focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(color: Color(0xff14DAE2), width: 2.0),
           borderRadius: BorderRadius.all(Radius.circular(20.0)),
         ),
         enabled: isLoading == false,
+        prefixIcon: Image.asset('images/phone4.png', height: 5,width: 5),
       ),
       //initialValue: _name,
       //onSaved: (value) => _name = value,

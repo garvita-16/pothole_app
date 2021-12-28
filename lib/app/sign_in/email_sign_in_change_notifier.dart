@@ -64,11 +64,11 @@ class _EmailSignInFormChangeNotifierState extends State<EmailSignInFormChangeNot
     }
   }
 
-  // void _toggleForm() {
-  //   model.toggleFormType();
-  //   _emailController.clear();
-  //   _passwordController.clear();
-  // }
+  void _toggleForm() {
+    model.toggleFormType();
+    _emailController.clear();
+    _passwordController.clear();
+  }
 
   List<Widget> _buildChildren() {
     return [
@@ -84,7 +84,7 @@ class _EmailSignInFormChangeNotifierState extends State<EmailSignInFormChangeNot
       _buildPasswordTextField(),
       SizedBox(height: 25.0),
       FormSubmitButton(
-        text: 'Sign in',
+        text: model.primaryText,
         onPressed: model.canSubmit
             ? _submit
             : () {
@@ -97,6 +97,15 @@ class _EmailSignInFormChangeNotifierState extends State<EmailSignInFormChangeNot
         //onPressed: _submit,
       ),
       SizedBox(height: 8.0),
+      FlatButton(
+        child: Text(
+          model.secondaryText,
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
+        onPressed: !model.isloading ? _toggleForm : null,
+      ),
     ];
   }
 
@@ -117,6 +126,7 @@ class _EmailSignInFormChangeNotifierState extends State<EmailSignInFormChangeNot
           borderSide: BorderSide(color: Color(0xff14DAE2), width: 2.0),
           borderRadius: BorderRadius.all(Radius.circular(20.0)),
         ),
+        prefixIcon: Image.asset('images/icon_lock.png'),
       ),
 
       obscureText: true,
@@ -143,6 +153,7 @@ class _EmailSignInFormChangeNotifierState extends State<EmailSignInFormChangeNot
           borderSide: BorderSide(color: Color(0xff14DAE2), width: 2.0),
           borderRadius: BorderRadius.all(Radius.circular(20.0)),
         ),
+        prefixIcon: Image.asset('images/icon_email.png'),
       ),
       controller: _emailController,
       focusNode: _emailFocus,
