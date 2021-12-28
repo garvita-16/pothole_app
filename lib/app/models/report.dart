@@ -70,7 +70,6 @@ class Report {
   dynamic location;
   Status status;
   String userId;
-
   factory Report.fromMap(Map<String, dynamic> data, String documentId) {
     if (data == null) {
       return null;

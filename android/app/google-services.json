@@ -22,6 +22,14 @@
           }
         },
         {
+          "client_id": "888019772639-bdecrbttcsbc5oco96bbrv9tmr8crldn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.pothole_detection_app",
+            "certificate_hash": "6658be71fec1af5e11b389114a08c1c6f3196861"
+          }
+        },
+        {
           "client_id": "888019772639-642rft133nbkasa11fg4ktg2erd7fl93.apps.googleusercontent.com",
           "client_type": 3
         }

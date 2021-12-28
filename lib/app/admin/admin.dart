@@ -43,6 +43,7 @@ class AdminPage extends StatelessWidget {
       appBar: AppBar(
         elevation: 2.0,
         title: Text('Admin Page'),
+        backgroundColor: Color(0xff14DAE2),
         actions: [
           FlatButton(
               child: Text('Logout',
@@ -58,6 +59,7 @@ class AdminPage extends StatelessWidget {
       ),
 
       body: _buildContents(context),
+      backgroundColor: Color(0xff251F34),
 
     );
   }

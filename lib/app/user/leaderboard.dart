@@ -35,8 +35,10 @@ class Leaderboard extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Leaderboard'),
+        backgroundColor: Color(0xff14DAE2),
       ),
       body: _buildContents(context),
+      backgroundColor: Color(0xff251F34),
     );
   }
 

@@ -11,8 +11,8 @@ class LeaderboardListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(user.firstName,style: TextStyle(fontSize: 18),),
-      trailing: Text('Points: ${user.points}',style: TextStyle(fontSize: 18),),
+      title: Text(user.firstName,style: TextStyle(fontSize: 18, color: Colors.white),),
+      trailing: Text('Points: ${user.points}',style: TextStyle(fontSize: 18, color: Colors.white),),
     );
   }
 }

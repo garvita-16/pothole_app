@@ -23,9 +23,10 @@ class _ShowReportDetailsState extends State<ShowReportDetails> {
       appBar: AppBar(
         elevation: 2.0,
         title: Text('Report Details'),
+        backgroundColor: Color(0xff14DAE2),
       ),
       body: _buildContent(context),
-      backgroundColor: Colors.white,
+      backgroundColor: Color(0xff251F34),
     );
   }
 
@@ -47,7 +48,7 @@ class _ShowReportDetailsState extends State<ShowReportDetails> {
                   'Severity : ${widget.report.severity}',
                   style: TextStyle(
                     fontSize: 15.0,
-                    color: Colors.black,
+                    color: Colors.white,
                   ),
                 ),
               ),
@@ -59,7 +60,7 @@ class _ShowReportDetailsState extends State<ShowReportDetails> {
                   'Location : ${widget.report.location['address']}',
                   style: TextStyle(
                     fontSize: 15.0,
-                    color: Colors.black,
+                    color: Colors.white,
                   ),
                 ),
               ),
@@ -71,7 +72,7 @@ class _ShowReportDetailsState extends State<ShowReportDetails> {
                   'Latitude : ${widget.report.location['latitude']}',
                   style: TextStyle(
                     fontSize: 15.0,
-                    color: Colors.black,
+                    color: Colors.white,
                   ),
                 ),
               ),
@@ -83,7 +84,7 @@ class _ShowReportDetailsState extends State<ShowReportDetails> {
                   'Longitude : ${widget.report.location['longitude']}',
                   style: TextStyle(
                     fontSize: 15.0,
-                    color: Colors.black,
+                    color: Colors.white,
                   ),
                 ),
               ),
@@ -95,7 +96,7 @@ class _ShowReportDetailsState extends State<ShowReportDetails> {
                   'Status : ${statusToString(widget.report.status)}',
                   style: TextStyle(
                     fontSize: 15.0,
-                    color: Colors.black,
+                    color: Colors.white,
                   ),
                 ),
               ),

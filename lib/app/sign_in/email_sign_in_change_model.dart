@@ -8,7 +8,7 @@ class EmailSignInChangeModel  with EmailAndPasswordValidator , ChangeNotifier{
     @required this.auth,
     this.email = '',
     this.password = '',
-    // this.formtype = EmailSignInFormType.signIn,
+    this.formtype = EmailSignInFormType.signIn,
     this.isloading = false,
     this.issubmitted = false,
   }
@@ -16,28 +16,33 @@ class EmailSignInChangeModel  with EmailAndPasswordValidator , ChangeNotifier{
   final AuthBase auth;
   String email;
   String password;
-  // EmailSignInFormType formtype;
+   EmailSignInFormType formtype;
   bool isloading;
   bool issubmitted;
 
   Future<void> submit() async{
     updatewith(isloading: true, issubmitted: true);
     try {
+      if (formtype == EmailSignInFormType.signIn) {
         await auth.signInWithEmailAndPassword(email, password);
+      }
+      else {
+        await auth.createUserWithEmailAndPassword(email, password);
+      }
     } catch(e){
       rethrow;
     } finally{
       updatewith(isloading: false);
     }
   }
-  // String get primaryText{
-  //   return formtype == EmailSignInFormType.signIn ? 'Sign in' : 'Register';
-  // }
-  // String get secondaryText{
-  //   return formtype == EmailSignInFormType.signIn
-  //       ? 'Need an account ? Register '
-  //       : 'Have an account ? Sign in';
-  // }
+  String get primaryText{
+    return formtype == EmailSignInFormType.signIn ? 'Sign in' : 'Register';
+  }
+  String get secondaryText{
+    return formtype == EmailSignInFormType.signIn
+        ? 'Need an account ? Register '
+        : 'Have an account ? Sign in';
+  }
   bool get canSubmit{
     return emailValidators.isValid(email) &&
         passwordValidators.isValid(password) &&
@@ -52,17 +57,17 @@ class EmailSignInChangeModel  with EmailAndPasswordValidator , ChangeNotifier{
     return emailValid ? emailError : null;
   }
 
-  // void toggleFormType(){
-  //   updatewith(
-  //     email: '',
-  //     password: '',
-  //     formtype: this.formtype == EmailSignInFormType.signIn
-  //         ? EmailSignInFormType.register
-  //         : EmailSignInFormType.signIn,
-  //     issubmitted: false,
-  //     isloading: false,
-  //   );
-  // }
+  void toggleFormType(){
+    updatewith(
+      email: '',
+      password: '',
+      formtype: this.formtype == EmailSignInFormType.signIn
+          ? EmailSignInFormType.register
+          : EmailSignInFormType.signIn,
+      issubmitted: false,
+      isloading: false,
+    );
+  }
 
   void updateEmail(String email){
     updatewith(email: email);
@@ -79,7 +84,7 @@ class EmailSignInChangeModel  with EmailAndPasswordValidator , ChangeNotifier{
 }){
       this.email = email ?? this.email;
       this.password = password ?? this.password;
-      //this.formtype = formtype ?? this.formtype;
+      this.formtype = formtype ?? this.formtype;
       this.isloading = isloading ?? this.isloading;
       this.issubmitted = issubmitted ?? this.issubmitted;
       notifyListeners();
