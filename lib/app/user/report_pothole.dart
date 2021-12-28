@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:pothole_detection_app/app/input_location.dart';
+import 'package:tflite/tflite.dart';
 
 class ReportPothole extends StatefulWidget {
   const ReportPothole({Key key, @required this.database}) : super(key: key);
@@ -34,9 +35,31 @@ class _ReportPotholeState extends State<ReportPothole> {
   double _rating = 0.0;
   String _imageUrl;
   File _image;
+  List<dynamic> _outputs;
   bool _isLoading = false;
   Map<dynamic, dynamic> _locationData;
   final TextEditingController _nameController=TextEditingController();
+
+  loadModel() async {
+    await Tflite.loadModel(
+      model: 'model/model_unquant.tflite',
+      labels: 'model/labels.txt',
+    );
+  }
+
+  classifyImage(image) async {
+    var output = await Tflite.runModelOnImage(
+      path: image.path,
+      numResults: 2,
+      threshold: 0.5,
+      imageMean: 127.5,
+      imageStd: 127.5,
+    );
+    setState(() {
+//Declare List _outputs in the class which will be used to show the classified classs name and confidence
+      _outputs = output;
+    });
+  }
 
   Future<void> pickImage() async {
     final img = await _picker.pickImage(source: ImageSource.gallery);
@@ -73,6 +96,7 @@ class _ReportPotholeState extends State<ReportPothole> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Report Pothole'),
@@ -221,20 +245,31 @@ class _ReportPotholeState extends State<ReportPothole> {
     }
   }
 
+  Future<void> _checkModel() async {
+    await loadModel();
+    await classifyImage(_image);
+    print(_outputs);
+    //CustomErrorDialog.show(context: context,title: _outputs[0]['label'].substring(2),message: 'confidence- '+_outputs[0]['confidence'].toString());
+}
+
   Future<void> _submit(BuildContext context) async {
     if (_image != null) {
       if (_locationData != null) {
         UserData _user=await widget.database.getUser();
         if (_user!=null && _user.firstName!=null) {
           final id = documentIdFromCurrentDate();
+          await _checkModel();
           if(await _uploadReportImage())
             {
+              bool isPothole=_outputs[0]['label'].substring(2) == 'pothole';
               final report = Report(
                 id: id,
                 image: _imageUrl,
                 severity: _rating,
                 location: _locationData,
                 status: Status.pending,
+                isPothole: isPothole,
+                modelAccuracy: _outputs[0]['confidence'],
               );
               try {
                 await widget.database.createReport(report);

@@ -23,6 +23,7 @@ class JobListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      tileColor: report.isPothole? Colors.greenAccent:Colors.redAccent,
       title: Text('Date - '+idToDate(report.id)+' -----> '+statusToString(report.status),
         style: TextStyle(color: Colors.white),),
       subtitle: Text('Time - '+idToTime(report.id), style: TextStyle(color: Colors.white),),
