@@ -3,7 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:pothole_detection_app/app/custom_widgets/custom_error_dialog.dart';
 import 'package:pothole_detection_app/app/custom_widgets/show_alert_diag.dart';
+import 'package:pothole_detection_app/landing_page.dart';
 
 import '../home_page.dart';
 
@@ -14,7 +16,7 @@ abstract class AuthBase {
   Future<User> signInWithGoogle();
   Future<User> signInWithEmailAndPassword(String email, String password);
   Future<User> createUserWithEmailAndPassword(String email, String password);
-  Future<bool> loginUserUsingPhone(String phone, BuildContext context);
+  Future<void> loginUserUsingPhone(String phone, BuildContext context);
 }
 
 class Auth implements AuthBase {
@@ -76,44 +78,26 @@ class Auth implements AuthBase {
     }
   }
 
-  // @override
-  // Future<User> signInWithGoogle() async {
-  //   final googleSignIn = GoogleSignIn();
-  //   final googleAccount = await googleSignIn.signIn();
-  //   if (googleAccount != null) {
-  //     final googleAuth = await googleAccount.authentication;
-  //     if (googleAuth.idToken != null && googleAuth.accessToken != null) {
-  //       final authResult = await _firebaseAuth.signInWithCredential(
-  //         GoogleAuthProvider.getCredential(
-  //           idToken: googleAuth.idToken,
-  //           accessToken: googleAuth.accessToken,
-  //         ),
-  //       );
-  //       return _userFromFirebase(authResult.user);
-  //     } else {
-  //       throw PlatformException(
-  //         code: 'ERROR_MISSING_GOOGLE_AUTH_TOKEN',
-  //         message: 'Missing Google Auth Token',
-  //       );
-  //     }
-  //   } else {
-  //     throw PlatformException(
-  //       code: 'ERROR_ABORTED_BY_USER',
-  //       message: 'Sign Aborted By User',
-  //     );
-  //   }
-  // }
 
-  Future<bool> loginUserUsingPhone(String phone, BuildContext context) async {
+  @override
+  Future<void> loginUserUsingPhone(String phone, BuildContext context) async {
     FirebaseAuth auth = FirebaseAuth.instance;
     dynamic userCredential = null;
     auth.verifyPhoneNumber(
       phoneNumber: phone,
       timeout: Duration(seconds: 60),
       verificationCompleted: (AuthCredential credential) async {
-        userCredential = await _firebaseAuth.signInWithCredential(credential);
-        final user = userCredential.user;
-        return user;
+        try {
+          userCredential = await _firebaseAuth.signInWithCredential(credential);
+        }
+        catch(e)
+        {
+          print(e.toString());
+          CustomErrorDialog.show(
+              context: context,
+              title: 'Error',
+              message: e.toString());
+        }
       },
       verificationFailed: (FirebaseAuthException exception) {
         print(exception.toString());
@@ -123,37 +107,45 @@ class Auth implements AuthBase {
             context: context,
             builder: (context) {
               return AlertDialog(
-                title: Text('Give the code'),
+                title: Text('Give the code',style: TextStyle(color: Colors.white)),
+                backgroundColor: Color(0xff251F34),
                 content: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     TextField(
+                      style: TextStyle(color: Colors.white),
                       controller: _codeController,
+                      keyboardType: TextInputType.phone,
+                      decoration: InputDecoration(
+                        labelText: 'Otp',
+                        labelStyle: TextStyle(color: Colors.white)
+                      ),
                     )
                   ],
                 ),
                 actions: [
                   FlatButton(
                     onPressed: () async {
-                      final code = _codeController.text.trim();
-                      final credential = PhoneAuthProvider.credential(
-                          verificationId: verificationId, smsCode: code);
-                      userCredential =
-                          await _firebaseAuth.signInWithCredential(credential);
-                      final user = userCredential.user;
-                      if (user != null) {
-                        Navigator.of(context).push(MaterialPageRoute<void>(
-                          fullscreenDialog: true,
-                          builder: (context) => HomePage(),
-                        ));
-                      } else {
-                        print('user is null');
+                      try {
+                        final code = _codeController.text.trim();
+                        final credential = PhoneAuthProvider.credential(
+                            verificationId: verificationId, smsCode: code);
+                        userCredential = await _firebaseAuth.signInWithCredential(credential);
                         Navigator.of(context).pop();
+                        Navigator.of(context).pop();
+                      }
+                      catch(e)
+                      {
+                        Navigator.of(context).pop();
+                        CustomErrorDialog.show(
+                            context: context,
+                            title: 'Invalid Otp',
+                            message: 'Try again');
                       }
                     },
                     child: Text('confirm',
                         style: TextStyle(color: Colors.white, fontSize: 15.0)),
-                    color: Colors.indigo,
+                    color: Color(0xff14DAE2),
                   )
                 ],
               );
@@ -161,7 +153,6 @@ class Auth implements AuthBase {
       },
       // codeAutoRetrievalTimeout: codeAutoRetrievalTimeout
     );
-    return userCredential.user;
   }
 
   @override

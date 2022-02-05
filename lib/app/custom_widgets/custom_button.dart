@@ -5,9 +5,11 @@ class CustomButton extends StatelessWidget {
   CustomButton(
       {@required this.text,
       this.backgroundColor = Colors.white,
-      this.textColor = Colors.black,
+      this.textColor = Colors.white,
+        this.assetname,
       this.onPressed});
   final String text;
+  String assetname;
   Color textColor;
   Color backgroundColor;
   VoidCallback onPressed;
@@ -15,11 +17,23 @@ class CustomButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: onPressed??(){},
-      child: Text(
-        text,
-        style: const TextStyle(
-          fontSize: 15.0,
-        ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          if(assetname != null)
+            Image.asset(assetname, height: 25.0, width: 25.0,),
+          Text(
+            text,
+            style: const TextStyle(
+              fontSize: 20.0,
+            ),
+          ),
+          if(assetname != null)
+            Opacity(
+            opacity: 0.0,
+              child: Image.asset(assetname, height: 25.0, width: 25.0,)
+          ),
+        ],
       ),
       style: ButtonStyle(
           foregroundColor: MaterialStateProperty.all<Color>(textColor),

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:pothole_detection_app/app/custom_widgets/custom_button.dart';
+import 'package:pothole_detection_app/app/globals.dart';
 import 'package:provider/provider.dart';
 
 import 'app/services/auth.dart';
+import 'app/sign_in/email_sign_in_page.dart';
 import 'app/sign_in/sign_in_with_phone.dart';
 
 class SignInPage extends StatefulWidget {
@@ -18,8 +20,9 @@ class _SignInPageState extends State<SignInPage> {
       appBar: AppBar(
         elevation: 2.0,
         title: Text('Pothole App'),
+        backgroundColor: Color(0xff14DAE2),
       ),
-      backgroundColor: Colors.grey[200],
+      backgroundColor: Color(0xff251F34),
       body: _buildContainer(context),
     );
   }
@@ -27,45 +30,60 @@ class _SignInPageState extends State<SignInPage> {
   Widget _buildContainer(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(32.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          const SizedBox(
-            height: 40.0,
-            child: Text('Sign in as admin',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.w600,
-                )),
-          ),
-          const SizedBox(height: 8.0),
-          CustomButton(
-            text: 'Sign in with Email',
-          ),
-          const SizedBox(height: 20.0),
-          const SizedBox(
-            height: 50.0,
-            child: Text('Sign in/Sign up as user',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.w600,
-                )),
-          ),
-          const SizedBox(height: 8.0),
-          CustomButton(
-            text: 'Sign in with Google',
-            onPressed: () => _signInWithGoogle(context),
-          ),
-          const SizedBox(height: 8.0),
-          CustomButton(
-            text: 'Sign in with Phone Number',
-            onPressed: () => _signInWithPhoneNumber(context),
-          ),
-          const SizedBox(height: 8.0),
-        ],
+      child: SingleChildScrollView(
+
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            SizedBox(height: 100,),
+            Image.asset('images/login.png', height: 160, width: 150,),
+            const SizedBox(height: 20.0),
+            const SizedBox(
+              height: 40.0,
+              child: Text('Login',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 25.0,
+                    fontWeight: FontWeight.w600,
+                  )),
+            ),
+            const SizedBox(height: 20.0),
+            CustomButton(
+              text: 'Sign in with Email',
+              assetname: 'images/icon_email.png',
+              onPressed: ()=>_signInWithEmail(context),
+              backgroundColor: Color(0xfff3B324E),
+            ),
+            // const SizedBox(height: 20.0),
+            // const SizedBox(
+            //   height: 50.0,
+            //   child: Text('Sign in/Sign up as user',
+            //       textAlign: TextAlign.center,
+            //       style: TextStyle(
+            //         color: Colors.white,
+            //         fontSize: 20.0,
+            //         fontWeight: FontWeight.w600,
+            //       )),
+            // ),
+            const SizedBox(height: 8.0),
+            CustomButton(
+              text: 'Sign in with Google',
+              backgroundColor:Color(0xfff3B324E), //Color(0xfff3B324E),
+              assetname: 'images/google-logo.png',
+              onPressed: () => _signInWithGoogle(context),
+            ),
+            const SizedBox(height: 8.0),
+            CustomButton(
+              text: 'Sign in with Phone',
+              assetname: 'images/phone4.png',
+              backgroundColor: Color(0xfff3B324E),
+              onPressed: () => _signInWithPhoneNumber(context),
+            ),
+            const SizedBox(height: 8.0),
+          ],
+        ),
       ),
     );
   }
@@ -85,4 +103,19 @@ class _SignInPageState extends State<SignInPage> {
       builder: (context) => SignInWithPhone(),
     ));
   }
+
+  void _signInWithEmail(BuildContext context){
+    setState(() {
+      emailSignIn = true;
+    });
+    final auth = Provider.of<AuthBase>(context, listen: false);
+    Navigator.of(context).push(
+        MaterialPageRoute<void>(
+          fullscreenDialog: true,
+          builder: (context) => EmailSignInPage(),
+        )
+    );
+  }
 }
+
+

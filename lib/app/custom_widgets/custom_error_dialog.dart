@@ -10,9 +10,15 @@ class CustomErrorDialog {
   }) {
     return showPlatformDialog(
       context: context,
-      builder: (context) => PlatformAlertDialog(
-        title: Text(title),
-        content: Text(message),
+      builder: (context) => AlertDialog(
+
+        title: Text(title, style: TextStyle(
+          color: Colors.white,
+        ),),
+        backgroundColor: Color(0xff251F34),
+        content: Text(message, style: TextStyle(
+          color: Colors.white,
+        ),),
         actions: actions ?? <Widget>[
           PlatformDialogAction(
             child: PlatformText('OK'),

@@ -1,8 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:pothole_detection_app/app/admin/admin.dart';
+import 'package:pothole_detection_app/app/globals.dart';
+import 'package:pothole_detection_app/app/models/user.dart';
 import 'package:pothole_detection_app/sign_in_page.dart';
 import 'package:provider/provider.dart';
 
+import 'app/loader_page.dart';
 import 'app/home_page.dart';
 import 'app/services/auth.dart';
 import 'app/services/database.dart';
@@ -22,9 +26,10 @@ class LandingPage extends StatelessWidget {
             return SignInPage();
           }
           print(user.toString());
+
           return Provider<Database>(
             create: (_) => FirestoreDatabase(uid: user.uid),
-            child: HomePage(),
+            child: LoaderPage(),
           );
         }
         return Scaffold(

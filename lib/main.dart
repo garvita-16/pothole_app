@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Pothole App',
         theme: ThemeData(
-          primarySwatch: Colors.indigo,
+          primarySwatch: Colors.blue,
         ),
         home: LandingPage(),
       ),
